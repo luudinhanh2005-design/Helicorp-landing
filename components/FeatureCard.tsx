@@ -49,18 +49,18 @@ export default function FeatureCard({
           whileInView={{ x: 0, opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="relative rounded-3xl bg-muted p-8 md:p-10 shadow-xl"
+          className="relative rounded-3xl bg-muted overflow-hidden shadow-xl aspect-square w-full"
         >
           {/* Skeleton placeholder */}
           {!imageLoaded && (
-            <div className="skeleton w-full aspect-square rounded-2xl" />
+            <div className="skeleton absolute inset-0 rounded-2xl" />
           )}
           <Image
             src={image}
             alt={title}
-            width={700}
-            height={700}
-            className={`mx-auto object-contain transition-opacity duration-500 ${
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className={`object-cover transition-opacity duration-500 ${
               imageLoaded ? "opacity-100" : "opacity-0"
             }`}
             onLoad={() => setImageLoaded(true)}
