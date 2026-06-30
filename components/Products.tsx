@@ -119,7 +119,7 @@ function ProductCard({
           alt={item.name}
           width={400}
           height={400}
-          className={`h-48 w-auto object-contain transition-all duration-500 group-hover:scale-105 ${
+          className={`h-48 w-auto object-contain rounded-2xl transition-all duration-500 group-hover:scale-105 ${
             imageLoaded ? "opacity-100" : "opacity-0"
           }`}
           onLoad={() => setImageLoaded(true)}
