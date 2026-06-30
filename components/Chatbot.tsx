@@ -150,9 +150,18 @@ export default function Chatbot() {
                 <h3 className="font-bold text-sm">HeLiCorp Assistant</h3>
                 <p className="text-xs opacity-80">Luôn sẵn sàng hỗ trợ bạn</p>
               </div>
-              <div className="ml-auto flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                <span className="text-xs opacity-80">Online</span>
+              <div className="ml-auto flex items-center gap-3">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                  <span className="text-xs opacity-80">Online</span>
+                </div>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="p-1 rounded-md hover:bg-white/20 transition-colors"
+                  aria-label="Close chat"
+                >
+                  <X className="w-5 h-5" />
+                </button>
               </div>
             </div>
 
