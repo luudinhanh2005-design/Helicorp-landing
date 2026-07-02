@@ -41,21 +41,25 @@ export async function POST(request: Request) {
       date: new Date().toISOString(),
     };
 
-    // Save to JSON file
-    const dataDir = path.join(process.cwd(), "data");
-    const filePath = path.join(dataDir, "orders.json");
-
-    let orders: Array<typeof newOrder> = [];
+    // Save to JSON file (only if filesystem is writable)
     try {
-      await fs.mkdir(dataDir, { recursive: true });
-      const existing = await fs.readFile(filePath, "utf-8");
-      orders = JSON.parse(existing);
-    } catch {
-      /* file doesn't exist yet */
-    }
+      const dataDir = path.join(process.cwd(), "data");
+      const filePath = path.join(dataDir, "orders.json");
 
-    orders.push(newOrder);
-    await fs.writeFile(filePath, JSON.stringify(orders, null, 2));
+      let orders: Array<typeof newOrder> = [];
+      try {
+        await fs.mkdir(dataDir, { recursive: true });
+        const existing = await fs.readFile(filePath, "utf-8");
+        orders = JSON.parse(existing);
+      } catch {
+        /* file doesn't exist yet */
+      }
+
+      orders.push(newOrder);
+      await fs.writeFile(filePath, JSON.stringify(orders, null, 2));
+    } catch (fsError) {
+      console.warn("Chế độ Serverless (Vercel) không hỗ trợ ghi file orders cục bộ:", fsError);
+    }
 
     // Forward to webhook (fire and forget)
     try {

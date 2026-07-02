@@ -33,34 +33,43 @@ export async function POST(request: Request) {
     }
 
     // Save to JSON file
-    const dataDir = path.join(process.cwd(), "data");
-    const filePath = path.join(dataDir, "subscribers.json");
-
-    let subscribers: Array<{ name: string; email: string; date: string }> = [];
-    try {
-      await fs.mkdir(dataDir, { recursive: true });
-      const existing = await fs.readFile(filePath, "utf-8");
-      subscribers = JSON.parse(existing);
-    } catch {
-      /* file doesn't exist yet */
-    }
-
-    // Check duplicate
-    if (subscribers.some((s) => s.email === email)) {
-      return NextResponse.json(
-        { error: "Email này đã được đăng ký." },
-        { status: 409 }
-      );
-    }
-
+    let isDuplicate = false;
     const newSubscriber = {
       name: name || "",
       email,
       date: new Date().toISOString(),
     };
-    subscribers.push(newSubscriber);
 
-    await fs.writeFile(filePath, JSON.stringify(subscribers, null, 2));
+    try {
+      const dataDir = path.join(process.cwd(), "data");
+      const filePath = path.join(dataDir, "subscribers.json");
+
+      let subscribers: Array<{ name: string; email: string; date: string }> = [];
+      try {
+        await fs.mkdir(dataDir, { recursive: true });
+        const existing = await fs.readFile(filePath, "utf-8");
+        subscribers = JSON.parse(existing);
+      } catch {
+        /* file doesn't exist yet */
+      }
+
+      // Check duplicate
+      if (subscribers.some((s) => s.email === email)) {
+        isDuplicate = true;
+      } else {
+        subscribers.push(newSubscriber);
+        await fs.writeFile(filePath, JSON.stringify(subscribers, null, 2));
+      }
+    } catch (fsError) {
+      console.warn("Chế độ Serverless (Vercel) không hỗ trợ ghi file subscribers cục bộ:", fsError);
+    }
+
+    if (isDuplicate) {
+      return NextResponse.json(
+        { error: "Email này đã được đăng ký." },
+        { status: 409 }
+      );
+    }
 
     // Forward to webhook (fire and forget)
     try {
