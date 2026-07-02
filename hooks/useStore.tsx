@@ -37,7 +37,8 @@ type Action =
   | { type: "ADD_RECENTLY_VIEWED"; product: Product }
   | { type: "TOGGLE_CART" }
   | { type: "SET_CART_OPEN"; open: boolean }
-  | { type: "HYDRATE"; state: Partial<StoreState> };
+  | { type: "HYDRATE"; state: Partial<StoreState> }
+  | { type: "CLEAR_CART" };
 
 function reducer(state: StoreState, action: Action): StoreState {
   switch (action.type) {
@@ -99,6 +100,8 @@ function reducer(state: StoreState, action: Action): StoreState {
       return { ...state, isCartOpen: action.open };
     case "HYDRATE":
       return { ...state, ...action.state };
+    case "CLEAR_CART":
+      return { ...state, cart: [] };
     default:
       return state;
   }
@@ -113,6 +116,7 @@ interface StoreContextType {
   addRecentlyViewed: (product: Product) => void;
   toggleCart: () => void;
   setCartOpen: (open: boolean) => void;
+  clearCart: () => void;
   cartTotal: number;
   cartCount: number;
   isFavorite: (productId: string) => boolean;
@@ -181,6 +185,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     (open: boolean) => dispatch({ type: "SET_CART_OPEN", open }),
     []
   );
+  const clearCart = useCallback(
+    () => dispatch({ type: "CLEAR_CART" }),
+    []
+  );
 
   const cartTotal = state.cart.reduce(
     (sum, item) => sum + item.product.price * item.quantity,
@@ -203,6 +211,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         addRecentlyViewed,
         toggleCart,
         setCartOpen,
+        clearCart,
         cartTotal,
         cartCount,
         isFavorite,
