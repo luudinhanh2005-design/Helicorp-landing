@@ -1,0 +1,19 @@
+[
+  {
+    "orderId": "HL-51041",
+    "name": "anh",
+    "phone": "0967152874",
+    "address": "qwe",
+    "paymentMethod": "BankTransfer",
+    "items": [
+      {
+        "id": "petree-litter",
+        "name": "PETREE Litter Box",
+        "price": 8990000,
+        "quantity": 1
+      }
+    ],
+    "total": 8990000,
+    "date": "2026-07-02T07:24:39.188Z"
+  }
+]

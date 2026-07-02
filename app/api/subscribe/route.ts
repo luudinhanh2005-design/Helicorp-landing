@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
 
-const WEBHOOK_URL = process.env.WEBHOOK_URL || "https://webhook.site/c08c8052-a5e2-45e0-82a1-a4778bead1cf"; // Cho phép cấu hình qua Environment Variable của Vercel
+const WEBHOOK_URL = process.env.WEBHOOK_URL || "https://webhook.site/797424c7-1370-4372-8858-d35ba09faede"; // Cho phép cấu hình qua Environment Variable của Vercel
 
 export async function POST(request: Request) {
   try {
